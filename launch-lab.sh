@@ -170,18 +170,17 @@ systemctl enable docker
 # Adicionar usuario padrao do ubuntu ao grupo docker
 usermod -aG docker ubuntu
 
-# Criar pasta persistente do workspace com permissoes para UID/GID 1000 (usuario coder do container)
+# Criar pasta persistente do workspace com permissoes para UID/GID 1000 (usuario barbosa do container)
 mkdir -p /home/ubuntu/workspace
 chown -R 1000:1000 /home/ubuntu/workspace
 chmod -R 775 /home/ubuntu/workspace
 
-# Execucao do container code-server
+# Execucao do container code-server em modo passwordless
 docker run -d \
   --name code-server \
   --restart always \
   -p 8080:8080 \
-  -v /home/ubuntu/workspace:/home/coder/project \
-  -e PASSWORD=SenhaDaTurma123 \
+  -v /home/ubuntu/workspace:/home/barbosa/project \
   ghcr.io/infobarbosa/data-eng-lab-docker-image:latest
 '
 
@@ -244,7 +243,7 @@ echo -e "${GREEN}${BOLD}========================================================
 echo -e " ${BOLD}Instância ID:${NC}     ${INSTANCE_ID}"
 echo -e " ${BOLD}IP Público:${NC}       ${PUBLIC_IP}"
 echo -e " ${BOLD}Link de Acesso:${NC}   ${CYAN}${BOLD}http://${PUBLIC_IP}:8080${NC}"
-echo -e " ${BOLD}Senha Padrão:${NC}     ${YELLOW}${BOLD}SenhaDaTurma123${NC}"
+echo -e " ${BOLD}Autenticação:${NC}     ${YELLOW}${BOLD}Passwordless (Acesso Direto - Sem Senha)${NC}"
 echo -e "-------------------------------------------------------------------"
 echo -e " ${BOLD}IMPORTANTE - TEMPO DE INICIALIZAÇÃO:${NC}"
 echo -e " O script User Data está instalando o Docker e baixando a imagem"

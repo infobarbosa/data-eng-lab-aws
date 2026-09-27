@@ -10,7 +10,7 @@ Github: [infobarbosa](https://github.com/infobarbosa)
 
 Bem-vindo ao laboratório prático de Engenharia de Dados! Este ambiente foi projetado para fornecer uma experiência profissional, rápida e padronizada utilizando uma instância **AWS EC2** (`m5.large`) equipada com **Docker**, executando um container com **code-server** (Visual Studio Code direto no navegador), **Python 3**, **PySpark**, **Java 21 Headless** e **Boto3**.
 
-Todo o seu trabalho fica persistido no diretório `/home/ubuntu/workspace` da instância EC2, que é montado dentro do container em `/home/coder/project`. Dessa forma, mesmo que o container seja reiniciado, seu código e arquivos permanecem intactos no disco EBS.
+Todo o seu trabalho fica persistido no diretório `/home/ubuntu/workspace` da instância EC2, que é montado dentro do container em `/home/barbosa/project`. Dessa forma, mesmo que o container seja reiniciado, seu código e arquivos permanecem intactos no disco EBS.
 
 ### ⚠️ Alerta Crítico: Região e Gestão de Custos
 
@@ -61,7 +61,7 @@ Ao final da execução, o terminal exibirá as seguintes informações:
  Instância ID:     i-0123456789abcdef0
  IP Público:       54.xxx.xxx.xxx
  Link de Acesso:   http://54.xxx.xxx.xxx:8080
- Senha Padrão:     SenhaDaTurma123
+ Autenticação:     Passwordless (Acesso Direto - Sem Senha)
 -------------------------------------------------------------------
  IMPORTANTE - TEMPO DE INICIALIZAÇÃO:
  O script User Data está instalando o Docker e baixando a imagem
@@ -74,10 +74,7 @@ Ao final da execução, o terminal exibirá as seguintes informações:
 
 1. Abra uma nova aba no seu navegador e cole o endereço: `http://<IP-PUBLICO>:8080`.
 2. Caso a página apresente erro de conexão ("A conexão falhou" ou "Site não pode ser alcançado"), **aguarde de 3 a 5 minutos** para que o Docker conclua o download da imagem e inicialize o serviço.
-3. Na tela de login do **code-server**, digite a senha padrão:
-   ```text
-   SenhaDaTurma123
-   ```
+3. O **code-server** iniciará diretamente na interface da IDE sem solicitar senha (modo passwordless ativado por padrão).
 4. Pronto! Você está dentro do ambiente do VS Code completo no seu navegador.
 
 ---
@@ -109,8 +106,8 @@ O ambiente AWS Academy possui uma política de inatividade que interrompe o labo
    ```text
    http://<NOVO_IP_PUBLICO>:8080
    ```
-4. Autentique-se com a senha: `SenhaDaTurma123`.
-5. Como o Docker está configurado com `--restart always`, ele iniciará automaticamente junto com o sistema operacional, e todos os arquivos em `/home/coder/project` estarão intactos.
+4. O code-server abrirá diretamente na IDE (modo passwordless habilitado).
+5. Como o Docker está configurado com `--restart always`, ele iniciará automaticamente junto com o sistema operacional, e todos os arquivos em `/home/barbosa/project` estarão intactos.
 
 ---
 
@@ -132,7 +129,7 @@ No terminal do code-server, execute o comando abaixo substituindo pelo seu e-mai
 ssh-keygen -t ed25519 -C "seu-email@exemplo.com"
 ```
 
-1. Quando perguntar `Enter file in which to save the key (/home/coder/.ssh/id_ed25519):`, apenas pressione **Enter**.
+1. Quando perguntar `Enter file in which to save the key (/home/barbosa/.ssh/id_ed25519):`, apenas pressione **Enter**.
 2. Quando perguntar pela senha (`passphrase`), pressione **Enter** duas vezes para deixar sem senha (ou defina uma de sua preferência).
 
 ### 4.3. Copiar a Chave Pública Gerada
@@ -185,10 +182,10 @@ git config --global init.defaultBranch main
 
 ### 4.7. Inicializar o Repositório do Seu Projeto
 
-Navegue até a pasta de trabalho (já é a pasta padrão `/home/coder/project`):
+Navegue até a pasta de trabalho (já é a pasta padrão `/home/barbosa/project`):
 
 ```bash
-cd /home/coder/project
+cd /home/barbosa/project
 git init
 ```
 
@@ -253,7 +250,7 @@ git push -u origin main
   ```bash
   pip3 install pandas duckdb matplotlib
   ```
-- **Acessando o Sistema de Arquivos:** Todo arquivo criado dentro de `/home/coder/project` é gravado diretamente no disco EBS da EC2 (`/home/ubuntu/workspace`).
+- **Acessando o Sistema de Arquivos:** Todo arquivo criado dentro de `/home/barbosa/project` é gravado diretamente no disco EBS da EC2 (`/home/ubuntu/workspace`).
 
 ---
 

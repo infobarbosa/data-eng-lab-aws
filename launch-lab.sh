@@ -7,6 +7,9 @@
 
 set -euo pipefail
 
+# Desabilitar o pager padrao da AWS CLI (evita que comandos travem no less/END)
+export AWS_PAGER=""
+
 # Cores para output formatado
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -96,14 +99,14 @@ aws ec2 authorize-security-group-ingress \
     --group-id "${SG_ID}" \
     --protocol tcp \
     --port 8080 \
-    --cidr 0.0.0.0/0 2>/dev/null || true
+    --cidr 0.0.0.0/0 >/dev/null 2>&1 || true
 
 aws ec2 authorize-security-group-ingress \
     --region "${AWS_REGION}" \
     --group-id "${SG_ID}" \
     --protocol tcp \
     --port 22 \
-    --cidr 0.0.0.0/0 2>/dev/null || true
+    --cidr 0.0.0.0/0 >/dev/null 2>&1 || true
 
 # ------------------------------------------------------------------------------
 # 3. Resolução da AMI (Ubuntu Server 24.04 LTS amd64)
@@ -149,7 +152,7 @@ if [ -n "${INSTANCE_ID}" ] && [ "${INSTANCE_ID}" != "None" ]; then
     
     if [ "${INSTANCE_STATE}" == "stopped" ]; then
         echo -e "  -> Inicializando instância existente parada..."
-        aws ec2 start-instances --region "${AWS_REGION}" --instance-ids "${INSTANCE_ID}" >/dev/null
+        aws ec2 start-instances --region "${AWS_REGION}" --instance-ids "${INSTANCE_ID}" >/dev/null 2>&1 || true
     fi
 else
     echo -e "  -> Provisionando nova instância EC2 (${BOLD}m5.large${NC})..."

@@ -19,7 +19,7 @@ Todo o seu trabalho fica persistido no diretório `/home/ubuntu/workspace` da in
 > 1. **Região Ativa:** Certifique-se sempre de que você está operando na região **Norte da Virgínia (`us-east-1`)** no topo direito do Console AWS. Todos os recursos do laboratório devem residir exclusivamente nessa região.
 > 2. **Consumo de Créditos:** A instância EC2 `m5.large` e o volume EBS gp3 consomem créditos do seu laboratório AWS Academy.
 > 3. **Desligamento Automático:** O AWS Academy desliga suas máquinas após o período da sessão (timeout de 4 horas). Ao encerrar sua aula ou sessão de estudos, garanta que a instância esteja parada (**Stopped**) ou aguarde o desligamento automático.
-> 4. **NUNCA Recrie a Máquina:** Uma vez provisionada na Aula 1, você **não** deve executar o script de provisionamento novamente nas aulas seguintes. Siga as instruções do *Guia de Sobrevivência* para religar a máquina existente.
+> 4. **NUNCA Recrie a Máquina:** Uma vez provisionada na Aula 1, você **não** deve executar o script de provisionamento novamente nas aulas seguintes: cada execução cria uma instância **nova e vazia**, com data e hora no nome. Siga as instruções do *Guia de Sobrevivência* para religar a máquina existente. Se precisar mesmo recriar, encerre a anterior (**Instance state** > **Terminate instance**) para não consumir créditos.
 
 ---
 
@@ -46,7 +46,7 @@ O script realizará de forma totalmente automatizada:
 - Descoberta da sua VPC padrão e Subnet pública.
 - Criação e configuração do Security Group (`lab-data-eng-sg`) liberando as portas `8080` (IDE) e `22` (SSH).
 - Consulta da AMI mais recente do Ubuntu Server 24.04 LTS.
-- Lançamento da instância EC2 `m5.large` com 30 GB gp3 e perfil IAM educacional.
+- Lançamento de uma nova instância EC2 `lab-data-engineering-AAAA-MM-DD_HH_MI_SS` (sufixo com a data e hora da execução), `m5.large`, com 30 GB gp3 e perfil IAM educacional.
 - Configuração do User Data (instalação do Docker e inicialização do container do code-server).
 - Monitoramento até a instância estar ativa (`running`), exibindo o IP público de acesso.
 
@@ -85,14 +85,14 @@ O ambiente AWS Academy possui uma política de inatividade que interrompe o labo
 
 > 🚫 **PROIBIÇÃO EXPRESSA:**
 > **NÃO execute o script `launch-lab.sh` novamente nas próximas aulas!**
-> Se você executar o script novamente, poderá criar recursos duplicados ou desnecessários. Seu disco e seus dados já estão salvos na instância existente.
+> Se você executar o script novamente, ele criará uma instância **nova e vazia** (com outra data e hora no nome), que também consome créditos. Seu disco e seus dados já estão salvos na instância existente.
 
 ### Como Religar a Instância Existente:
 
 1. Acesse o Console AWS na região **us-east-1**.
 2. No campo de busca superior, digite **EC2** e clique no serviço.
 3. No menu lateral esquerdo, clique em **Instances** (Instâncias).
-4. Localize a sua instância chamada **`lab-data-engineering`** (ela estará com status *Stopped*).
+4. Localize a sua instância chamada **`lab-data-engineering-<data e hora>`** (ela estará com status *Stopped*; se houver mais de uma, use a mais recente).
 5. Selecione a caixinha ao lado da instância, clique no botão **Instance state** (Estado da instância) no menu superior e clique em **Start instance** (Iniciar instância).
 6. Aguarde cerca de 1 minuto até o status mudar para **Running** (Em execução).
 
@@ -100,7 +100,7 @@ O ambiente AWS Academy possui uma política de inatividade que interrompe o labo
 
 > ℹ️ **Atenção:** No modelo de nuvem sem IP elástico, toda vez que uma máquina é parada e reiniciada, a AWS atribui um **novo endereço IP público**.
 
-1. Com a instância `lab-data-engineering` selecionada na lista, olhe no painel de detalhes abaixo.
+1. Com a instância `lab-data-engineering-<data e hora>` selecionada na lista, olhe no painel de detalhes abaixo.
 2. Localize o campo **Public IPv4 address** (Endereço IPv4 público).
 3. Copie esse endereço e acesse no navegador adicionando a porta `:8080`:
    ```text
